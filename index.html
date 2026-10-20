@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090c0c"><meta name="description" content="Follow the safety clues. Crack the case. Two attempts to open the vault.">
+<title>VISTAGEOMATICS | The Safety Case</title><link rel="stylesheet" href="vault.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="identity"><div class="brand"><svg class="official-logo" viewBox="210 340 520 205" role="img" aria-label="VISTAGEOMATICS" preserveAspectRatio="xMidYMid meet"><image href="assets/vistageomatics-logo.jpg" x="0" y="0" width="900" height="900"/></svg></div><span class="division">SAFETY INVESTIGATION DIVISION</span></div>
+  <div class="controls"><span class="mode" id="mode-chip"><i></i><span id="mode-label">DEMO MODE · LOCAL ONLY</span></span><button id="sound-toggle" type="button" aria-label="Turn sound off" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4zM16 8q4 4 0 8M19 5q7 7 0 14"/></svg><span>Sound on</span></button></div>
+</header>
+<main class="case-scene">
+  <section class="evidence" aria-labelledby="case-heading">
+    <div class="case-copy"><p class="eyebrow" id="round-title">CONFIDENTIAL CASE FILE <span>⟶</span></p><h1 id="case-heading">THE SAFETY CASE</h1><p class="tagline">FOLLOW THE CLUES. CRACK THE CODE. OPEN THE SAFE.</p></div>
+    <div class="dossier" role="img" aria-label="Worn Safety Mystery investigation folder marked Unsolved, surrounded by safety photographs and notes"></div>
+  </section>
+  <section class="vault-area" aria-label="Safety Mystery vault">
+    <div class="vault" id="vault">
+      <div class="chamber" id="chamber" hidden aria-live="polite"><div><div class="trophy" id="result-icon" aria-hidden="true">🏆</div><h2 id="result-heading"></h2><p id="result-message"></p><p class="winner-name" id="result-name"></p><p class="result-detail" id="result-detail"></p><button type="button" id="relock">RE-LOCK THE SAFE</button></div></div>
+      <div class="vault-door" id="vault-door">
+        <form id="safe-form" class="terminal" autocomplete="off" novalidate>
+          <h2>ENTER THE CASE CODE</h2><p class="terminal-intro">The clues are hidden. The code opens the truth.</p>
+          <div class="employee-field"><label for="employee-name">Employee full name</label><input id="employee-name" type="text" maxlength="60" placeholder="First and last name…" autocomplete="name" required></div>
+          <div class="code-field"><label for="entry-code">Case code</label><div class="code-entry"><div class="code-slots" id="code-slots" aria-hidden="true"><span>◦</span><span>◦</span><span>◦</span><span>◦</span></div><input id="entry-code" type="text" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" spellcheck="false" autocapitalize="off" aria-describedby="attempts-label" required></div></div>
+          <div class="keypad" aria-label="Numeric safe keypad"><button type="button" data-digit="1">1</button><button type="button" data-digit="2">2</button><button type="button" data-digit="3">3</button><button type="button" data-digit="4">4</button><button type="button" data-digit="5">5</button><button type="button" data-digit="6">6</button><button type="button" data-digit="7">7</button><button type="button" data-digit="8">8</button><button type="button" data-digit="9">9</button><button type="button" id="clear-key" class="clear" aria-label="Clear code">C</button><button type="button" data-digit="0">0</button><button type="submit" id="submit-code" class="submit" aria-label="Try this code">➜</button></div>
+          <p id="screen-alert" class="screen-alert" role="status" aria-live="polite">AWAITING CODE ENTRY</p><p id="attempts-label" class="attempts" aria-live="polite">2 ATTEMPTS PER EMPLOYEE</p>
+        </form>
+        <span class="vault-number" aria-hidden="true">VAULT 01</span>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><span class="footer-note">OBSERVE. INVESTIGATE. SOLVE.</span><div class="prize"><span aria-hidden="true">🏆</span> FIRST CORRECT EMPLOYEE WINS THE PRIZE</div><span class="footer-limit">TWO ATTEMPTS. ONE CASE.</span></footer>
+<div id="confetti-layer" class="confetti-layer" aria-hidden="true"></div>
+<script src="config.js"></script><script src="attempts.js"></script><script src="sound.js"></script><script src="vault.js"></script>
+</body></html>
