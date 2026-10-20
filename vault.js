@@ -10,7 +10,7 @@
   const demo=createDemoStore(local,'demo-v3-release');
   const vault=$('vault'),form=$('safe-form'),name=$('employee-name'),code=$('entry-code');
   let busy=false,checking=false,remaining=2,closed=false,backendReady=!live;
-  let title='Safety Mystery',roundId=null,soundEnabled=true,quotaVersion=0;
+  let title='Safety Mystery',roundId=null,soundEnabled=true,quotaVersion=0,quotaTimer=null,quotaName='';
   const sound=VistaSound.create();
   function armAudio(){sound.arm();}
   document.addEventListener('pointerdown',armAudio,{passive:true});
@@ -26,8 +26,8 @@
   });
   function message(text,kind=''){const node=$('screen-alert');node.textContent=text;node.className='screen-alert'+(kind?' '+kind:'');}
   function controls(){
-    const locked=busy||checking||remaining===0||closed||!backendReady||vault.classList.contains('open');
-    for(const element of form.querySelectorAll('button,input'))element.disabled=element===name?busy||vault.classList.contains('open'):locked;
+    const locked=busy||remaining===0||closed||!backendReady||vault.classList.contains('open');
+    for(const element of form.querySelectorAll('button,input'))element.disabled=element===name?busy||vault.classList.contains('open'):locked||(checking&&element.id==='submit-code');
     vault.classList.toggle('exhausted',remaining===0);
     $('attendance-exhausted').hidden=remaining!==0||vault.classList.contains('open');
     $('attempts-label').textContent=name.value.trim().length<2?'2 ATTEMPTS PER EMPLOYEE':checking?'CHECKING ATTEMPTS…':remaining===0?'NO ATTEMPTS REMAINING':remaining+' ATTEMPT'+(remaining===1?'':'S')+' REMAINING';
@@ -55,11 +55,14 @@
     }finally{clearTimeout(timer);}
   }
   async function quota(){
-    const entered=name.value.trim(),version=++quotaVersion;
+    clearTimeout(quotaTimer);quotaTimer=null;
+    const entered=name.value.trim(),employeeKey=normalizeName(entered);
+    if(live&&checking&&quotaName===employeeKey)return;
+    const version=++quotaVersion;
     if(entered.length<2){remaining=2;checking=false;controls();return;}
     if(!live){remaining=demo.remaining(entered);if(remaining===0)message('TWO ATTEMPTS USED · THIS CASE IS LOCKED','error');else message('AWAITING CODE ENTRY');controls();return;}
     if(!backendReady)return;
-    checking=true;controls();
+    checking=true;quotaName=employeeKey;controls();
     try{
       const result=await request({action:'attempt_status',employee_name:entered});
       if(version!==quotaVersion||normalizeName(name.value)!==normalizeName(entered))return;
@@ -69,16 +72,20 @@
         message(remaining===0?'TWO ATTEMPTS USED · THIS CASE IS LOCKED':'AWAITING CODE ENTRY',remaining===0?'error':'');
       }else throw Error('Backend update needed');
     }catch{if(version===quotaVersion){backendReady=false;message('BACKEND UPDATE NEEDED · CONTACT YOUR ADMIN','error');}}
-    finally{if(version===quotaVersion){checking=false;controls();}}
+    finally{if(version===quotaVersion){checking=false;quotaName='';controls();}}
   }
   name.addEventListener('input',()=>{
-    ++quotaVersion;checking=false;
+    clearTimeout(quotaTimer);quotaTimer=null;
+    ++quotaVersion;checking=false;quotaName='';
     remaining=live?2:demo.remaining(name.value);
     if(!live)message(remaining===0?'TWO ATTEMPTS USED · THIS CASE IS LOCKED':'AWAITING CODE ENTRY',remaining===0?'error':'');
     controls();
+    if(live&&name.value.trim().length>=2&&!closed)quotaTimer=setTimeout(()=>{void quota();},250);
   });
-  name.addEventListener('change',()=>{void quota();});
   name.addEventListener('blur',()=>{void quota();});
+  name.addEventListener('keydown',event=>{
+    if(event.key==='Enter'){event.preventDefault();void quota();if(!code.disabled)code.focus();}
+  });
   async function status(){
     try{
       const response=await fetch(apiUrl,{cache:'no-store'});if(!response.ok)throw Error('Status unavailable');
@@ -90,6 +97,7 @@
       $('mode-chip').classList.toggle('live',!closed);
       $('round-title').textContent=title.toUpperCase();
       if(closed)message('THIS COMPETITION IS CLOSED','error');
+      else if(name.value.trim().length>=2)void quota();
     }catch{backendReady=false;$('mode-label').textContent='BACKEND UNAVAILABLE';$('mode-chip').classList.add('unavailable');message('BACKEND UPDATE NEEDED · CONTACT YOUR ADMIN','error');}
     controls();
   }
