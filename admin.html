@@ -64,7 +64,8 @@
 // NEVER paste a database password, service_role key or secret key here.
 const CONFIG={
   SUPABASE_URL:window.VISTA_CONFIG?.SUPABASE_URL || '', // Example: 'https://your-project-ref.supabase.co'
-  PUBLISHABLE_KEY:window.VISTA_CONFIG?.PUBLISHABLE_KEY || '' // Supabase dashboard → Project Settings → API Keys → Publishable key
+  PUBLISHABLE_KEY:window.VISTA_CONFIG?.PUBLISHABLE_KEY || '', // Supabase dashboard → Project Settings → API Keys → Publishable key
+  SAFE_ADMIN_FUNCTION:window.VISTA_CONFIG?.SAFE_ADMIN_FUNCTION || 'safe-admin'
 };
 // ────────────────────────────────────────────────────────────
 const $=id=>document.getElementById(id);
@@ -83,7 +84,7 @@ async function api(payload){
   if(!sb)throw Error('Connect your Supabase project first');
   const {data:{session},error}=await sb.auth.getSession();
   if(error||!session)throw Error('Please sign in again');
-  const res=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/safe-admin',{
+  const res=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/'+encodeURIComponent(CONFIG.SAFE_ADMIN_FUNCTION),{
     method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
     body:JSON.stringify(payload)
   });

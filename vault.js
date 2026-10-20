@@ -3,7 +3,8 @@
   const $=id=>document.getElementById(id);
   const {normalizeName,createDemoStore}=VistaAttempts;
   const config=window.VISTA_CONFIG||{};
-  const apiUrl=config.SUPABASE_URL?config.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/safe-submit':'';
+  const submitFunction=config.SAFE_SUBMIT_FUNCTION || 'safe-submit';
+  const apiUrl=config.SUPABASE_URL?config.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/'+encodeURIComponent(submitFunction):'';
   const live=Boolean(apiUrl);
   let local;try{local=window.localStorage;}catch{}
   const demo=createDemoStore(local,'demo-v3-release');
