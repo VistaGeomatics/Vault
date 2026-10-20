@@ -17,7 +17,7 @@
   </section>
   <section class="vault-area" aria-label="Safety Mystery vault">
     <div class="vault" id="vault">
-      <div class="chamber" id="chamber" hidden aria-live="polite"><div><div class="trophy" id="result-icon" aria-hidden="true">🏆</div><h2 id="result-heading"></h2><p id="result-message"></p><p class="winner-name" id="result-name"></p><p class="result-detail" id="result-detail"></p><button type="button" id="relock">RE-LOCK THE SAFE</button></div></div>
+      <div class="chamber" id="chamber" hidden aria-live="polite"><div><div class="trophy" id="result-icon" aria-hidden="true">🏆</div><h2 id="result-heading"></h2><p id="result-message"></p><p class="winner-name" id="result-name"></p><p class="result-detail" id="result-detail"></p><a class="attendance-link" id="attendance-complete" href="https://forms.gle/c4yT6w2k7b5jwqBf8">Continue to Attendance</a></div></div>
       <div class="vault-door" id="vault-door">
         <form id="safe-form" class="terminal" autocomplete="off" novalidate>
           <h2>ENTER THE CASE CODE</h2><p class="terminal-intro">The clues are hidden. The code opens the truth.</p>
@@ -25,6 +25,7 @@
           <div class="code-field"><label for="entry-code">Case code</label><div class="code-entry"><div class="code-slots" id="code-slots" aria-hidden="true"><span>◦</span><span>◦</span><span>◦</span><span>◦</span></div><input id="entry-code" type="text" inputmode="numeric" pattern="[0-9]{4}" minlength="4" maxlength="4" spellcheck="false" autocapitalize="off" aria-describedby="attempts-label" required></div></div>
           <div class="keypad" aria-label="Numeric safe keypad"><button type="button" data-digit="1">1</button><button type="button" data-digit="2">2</button><button type="button" data-digit="3">3</button><button type="button" data-digit="4">4</button><button type="button" data-digit="5">5</button><button type="button" data-digit="6">6</button><button type="button" data-digit="7">7</button><button type="button" data-digit="8">8</button><button type="button" data-digit="9">9</button><button type="button" id="clear-key" class="clear" aria-label="Clear code">C</button><button type="button" data-digit="0">0</button><button type="submit" id="submit-code" class="submit" aria-label="Try this code">➜</button></div>
           <p id="screen-alert" class="screen-alert" role="status" aria-live="polite">AWAITING CODE ENTRY</p><p id="attempts-label" class="attempts" aria-live="polite">2 ATTEMPTS PER EMPLOYEE</p>
+          <a class="attendance-link" id="attendance-exhausted" href="https://forms.gle/c4yT6w2k7b5jwqBf8" hidden>Continue to Attendance</a>
         </form>
         <span class="vault-number" aria-hidden="true">VAULT 01</span>
       </div>

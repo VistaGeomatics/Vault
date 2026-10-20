@@ -29,6 +29,7 @@
     const locked=busy||checking||remaining===0||closed||!backendReady||vault.classList.contains('open');
     for(const element of form.querySelectorAll('button,input'))element.disabled=element===name?busy||vault.classList.contains('open'):locked;
     vault.classList.toggle('exhausted',remaining===0);
+    $('attendance-exhausted').hidden=remaining!==0||vault.classList.contains('open');
     $('attempts-label').textContent=name.value.trim().length<2?'2 ATTEMPTS PER EMPLOYEE':checking?'CHECKING ATTEMPTS…':remaining===0?'NO ATTEMPTS REMAINING':remaining+' ATTEMPT'+(remaining===1?'':'S')+' REMAINING';
   }
   function slots(){
@@ -104,12 +105,12 @@
     $('result-heading').textContent=won?'YOU CRACKED THE CASE!':'CODE CORRECT!';
     $('result-message').textContent=won?'You are the first to solve '+title+'.':'You solved the case. Another employee opened the safe first.';
     $('result-name').textContent=employee;
-    $('result-detail').textContent=!live?'DEMO RESULT · Saved only in this browser.':won?'Your winning entry has been recorded. Claim your prize from the safety manager.':'Your correct entry has been recorded.';
+    $('result-detail').textContent=!live?'DEMO RESULT · Saved only in this browser.':won?'Your winning entry has been recorded. Claim your prize from Jason Morgan.':'Your correct entry has been recorded.';
     $('chamber').hidden=false;vault.classList.add('open',won?'winner':'later');
     $('vault-door').setAttribute('inert','');
     message('ACCESS GRANTED','success');play(result.status);controls();
     if(won)setTimeout(confetti,850);
-    setTimeout(()=>$('relock').focus({preventScroll:true}),1900);
+    setTimeout(()=>$('attendance-complete').focus({preventScroll:true}),1900);
   }
   form.addEventListener('submit',async event=>{
     event.preventDefault();if(busy||checking||vault.classList.contains('open'))return;
@@ -135,11 +136,6 @@
       }
     }catch{message('ENTRY NOT CONFIRMED · PLEASE TRY AGAIN','error');}
     finally{busy=false;controls();}
-  });
-  $('relock').addEventListener('click',()=>{
-    vault.classList.remove('open','winner','later','wrong');$('vault-door').removeAttribute('inert');
-    name.value='';code.value='';remaining=2;slots();message('AWAITING CODE ENTRY');controls();
-    setTimeout(()=>{$('chamber').hidden=true;name.focus({preventScroll:true});},1800);
   });
   window.addEventListener('storage',()=>{if(!live){remaining=demo.remaining(name.value);controls();}});
   slots();controls();if(live){$('mode-label').textContent='CONNECTING…';void status();}
