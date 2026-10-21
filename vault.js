@@ -9,6 +9,13 @@
   let local;try{local=window.localStorage;}catch{}
   const demo=createDemoStore(local,'demo-v3-release');
   const vault=$('vault'),form=$('safe-form'),name=$('employee-name'),code=$('entry-code');
+  const device=window.navigator||{};
+  const appleTouch=/iPad|iPhone|iPod/.test(device.userAgent||'')||(/Mac/.test((device.platform||'')+' '+(device.userAgent||''))&&device.maxTouchPoints>1);
+  if(appleTouch){
+    // Keep the custom keypad in charge, including on iPads using desktop Safari.
+    code.readOnly=true;code.inputMode='none';
+    code.setAttribute('aria-label','Four-digit case code. Use the safe number buttons.');
+  }
   let busy=false,checking=false,remaining=2,closed=false,backendReady=!live;
   let title='Safety Mystery',roundId=null,soundEnabled=true,quotaVersion=0,quotaTimer=null,quotaName='';
   const sound=VistaSound.create();
