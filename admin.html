@@ -62,8 +62,8 @@
 // Paste the project URL and PUBLIC publishable (or legacy anon) key here.
 // NEVER paste a database password, service_role key or secret key here.
 const CONFIG={
-  SUPABASE_URL:'', // Example: 'https://your-project-ref.supabase.co'
-  PUBLISHABLE_KEY:'' // Supabase dashboard → Project Settings → API Keys → Publishable key
+  SUPABASE_URL:'https://ilcounsnndvyhdqgtkjl.supabase.co', // Example: 'https://your-project-ref.supabase.co'
+  PUBLISHABLE_KEY:'sb_publishable_2Z2ykVnPCEXBqfRqt0U3cQ_GnUZALkX' // Supabase dashboard → Project Settings → API Keys → Publishable key
 };
 // ────────────────────────────────────────────────────────────
 const $=id=>document.getElementById(id);
@@ -82,7 +82,7 @@ async function api(payload){
   if(!sb)throw Error('Connect your Supabase project first');
   const {data:{session},error}=await sb.auth.getSession();
   if(error||!session)throw Error('Please sign in again');
-  const res=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/safe-admin',{
+  const res=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,'')+'/functions/v1/smooth-service',{
     method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
     body:JSON.stringify(payload)
   });
